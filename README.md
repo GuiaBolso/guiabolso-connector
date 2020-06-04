@@ -1,4 +1,8 @@
 # Guiabolso Connector
+
+[![build](https://github.com/GuiaBolso/guiabolso-connector/workflows/build/badge.svg?branch=master)](https://github.com/GuiaBolso/guiabolso-connector/actions)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 O Guiabolso Connector é um cliente desenvolvido em Kotlin, que provê uma camada de abstração com o Guiabolso Connect com o objetivo de tornar _plug-and-play_ a integração com o produto .
 
 Se você estiver interessado apenas em como configurar o Guiabolso Connector para integração no seu ambiente, sugerimos visitar a [área do desenvolvedor](https://guiabolsoconnect.com.br/) no nosso site, você vai encontrar um _quickStart_ com um passo-a-passo de com realizar a integração.
