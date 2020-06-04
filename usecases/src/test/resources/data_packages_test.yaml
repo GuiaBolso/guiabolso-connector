@@ -1,0 +1,18 @@
+dataPackages:
+  - publish:
+      type: EVENT
+      name: guiabolso-connector:variables
+      version: 1
+    sources:
+      - statusKey: GBCONNECT.CREDIT.SCORES.STATUS
+        eventName: guiabolso-connector:user:credit:scores
+        eventVersion: 1
+      - statusKey: GBCONNECT.CREDIT.TRANSACTIONS.VARIABLES.STATUS
+        eventName: guiabolso-connector:user:transactions:variables
+        eventVersion: 1
+
+dataCaches:
+  - eventName: guiabolso-connector:user:credit:scores
+    eventVersion: "*"
+    duration: 30 days
+    cacheUsagePolicy: ALWAYS
