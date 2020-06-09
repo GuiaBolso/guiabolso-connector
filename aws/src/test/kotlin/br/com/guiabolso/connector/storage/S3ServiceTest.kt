@@ -90,7 +90,7 @@ class S3ServiceTest {
     fun `should put data`() {
         val key = nextObject<String>()
         val value = nextObject<EncryptedData>()
-        val duration = nextObject<Duration>()
+        val duration = Duration.ofHours(1)
 
         whenever(timeProvider.now()).thenReturn(ZonedDateTime.now(ZoneOffset.UTC))
 
