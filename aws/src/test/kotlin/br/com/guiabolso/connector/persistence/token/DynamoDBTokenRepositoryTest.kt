@@ -112,7 +112,7 @@ class DynamoDBTokenRepositoryTest {
         val accessToken = EncryptedData(nextObject<String>().toByteArray())
         val refreshToken = EncryptedData(nextObject<String>().toByteArray())
 
-        repository.insertToken(userId, accessToken, refreshToken)
+        repository.putToken(userId, accessToken, refreshToken)
 
         val actual = Pair(
             first = repository.findAccessTokenBy(userId),

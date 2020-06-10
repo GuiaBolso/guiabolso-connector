@@ -24,7 +24,7 @@ class StubbedTokenRepositoryTest : AbstractSpringTestCase() {
         val userId = userId()
         val refreshToken = encryptedToken()
         val accessToken = encryptedToken()
-        repository.insertToken(userId = userId, refreshToken = refreshToken, accessToken = accessToken)
+        repository.putToken(userId = userId, refreshToken = refreshToken, accessToken = accessToken)
 
         val actual = repository.findAccessTokenBy(userId)
         assertThat(actual).isEqualTo(accessToken)
@@ -42,7 +42,7 @@ class StubbedTokenRepositoryTest : AbstractSpringTestCase() {
         val userId = userId()
         val refreshToken = encryptedToken()
         val accessToken = encryptedToken()
-        repository.insertToken(userId = userId, refreshToken = refreshToken, accessToken = accessToken)
+        repository.putToken(userId = userId, refreshToken = refreshToken, accessToken = accessToken)
 
         val actual = repository.findRefreshTokenBy(userId)
 
@@ -59,7 +59,7 @@ class StubbedTokenRepositoryTest : AbstractSpringTestCase() {
     @Test
     fun `should update access token`() {
         val userId = userId()
-        repository.insertToken(userId = userId, refreshToken = encryptedToken(), accessToken = encryptedToken())
+        repository.putToken(userId = userId, refreshToken = encryptedToken(), accessToken = encryptedToken())
 
         val accessToken = encryptedToken()
         repository.updateAccessToken(userId, accessToken)
@@ -75,7 +75,7 @@ class StubbedTokenRepositoryTest : AbstractSpringTestCase() {
         val accessToken = encryptedToken()
         val refreshToken = encryptedToken()
 
-        repository.insertToken(userId, accessToken, refreshToken)
+        repository.putToken(userId, accessToken, refreshToken)
 
         val actual = Pair(
             first = repository.findAccessTokenBy(userId),
@@ -87,13 +87,13 @@ class StubbedTokenRepositoryTest : AbstractSpringTestCase() {
     }
 
     @Test
-    fun `entry should be unique by userId`() {
+    fun `entry should be overrided when it exists`() {
         val userId = userId()
-        repository.insertToken(userId = userId, refreshToken = encryptedToken(), accessToken = encryptedToken())
+        repository.putToken(userId = userId, refreshToken = encryptedToken(), accessToken = encryptedToken())
 
         val refreshToken = encryptedToken()
         val accessToken = encryptedToken()
-        repository.insertToken(userId = userId, refreshToken = refreshToken, accessToken = accessToken)
+        repository.putToken(userId = userId, refreshToken = refreshToken, accessToken = accessToken)
 
         val currentRefreshToken = repository.findRefreshTokenBy(userId)
         val currentAccessToken = repository.findAccessTokenBy(userId)

@@ -87,7 +87,7 @@ class TokenExchangeServiceTest {
         verify(cryptographyService).encrypt(decryptedAccessToken.toByteArray())
         verify(cryptographyService).encrypt(decryptedRefreshToken.toByteArray())
         verify(cacheService).putData(key, accessToken, DURATION, ONLY_IN_MEMORY)
-        verify(repository).insertToken(userId, accessToken, refreshToken)
+        verify(repository).putToken(userId, accessToken, refreshToken)
     }
 
     @Test

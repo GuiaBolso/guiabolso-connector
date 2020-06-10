@@ -46,7 +46,7 @@ class TokenExchangeService(
             onlyInMemory = true
         )
 
-        repository.insertToken(userId, accessToken, refreshToken)
+        repository.putToken(userId, accessToken, refreshToken)
     }
 
     private fun String.ensureIsNotExpired() {

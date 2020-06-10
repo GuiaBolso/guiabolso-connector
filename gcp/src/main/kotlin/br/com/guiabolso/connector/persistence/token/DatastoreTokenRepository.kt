@@ -49,7 +49,7 @@ class DatastoreTokenRepository(
         }
     }
 
-    override fun insertToken(userId: String, accessToken: EncryptedData, refreshToken: EncryptedData) {
+    override fun putToken(userId: String, accessToken: EncryptedData, refreshToken: EncryptedData) {
         val entity = Entity.newBuilder(keyFactory.newKey(userId))
             .set(ACCESS_TOKEN, accessToken.stringValue())
             .set(REFRESH_TOKEN, refreshToken.stringValue())

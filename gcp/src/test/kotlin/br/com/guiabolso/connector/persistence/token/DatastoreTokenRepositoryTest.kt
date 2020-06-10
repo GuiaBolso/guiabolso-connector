@@ -47,7 +47,7 @@ class DatastoreTokenRepositoryTest {
         val accessToken = EncryptedData(nextObject<String>().toByteArray())
         val refreshToken = EncryptedData(nextObject<String>().toByteArray())
 
-        repository.insertToken(userId, accessToken, refreshToken)
+        repository.putToken(userId, accessToken, refreshToken)
 
         val actual = repository.findAccessTokenBy(userId)
 
@@ -69,7 +69,7 @@ class DatastoreTokenRepositoryTest {
         val accessToken = EncryptedData(nextObject<String>().toByteArray())
         val refreshToken = EncryptedData(nextObject<String>().toByteArray())
 
-        repository.insertToken(userId, accessToken, refreshToken)
+        repository.putToken(userId, accessToken, refreshToken)
 
         val actual = repository.findAccessTokenBy(userId)
 
@@ -91,7 +91,7 @@ class DatastoreTokenRepositoryTest {
         val accessToken = EncryptedData(nextObject<String>().toByteArray())
         val refreshToken = EncryptedData(nextObject<String>().toByteArray())
 
-        repository.insertToken(userId, accessToken, refreshToken)
+        repository.putToken(userId, accessToken, refreshToken)
 
         val actual = repository.findRefreshTokenBy(userId)
 
@@ -114,7 +114,7 @@ class DatastoreTokenRepositoryTest {
         val accessToken = EncryptedData(nextObject<String>().toByteArray())
         val refreshToken = EncryptedData(nextObject<String>().toByteArray())
 
-        repository.insertToken(userId, accessToken, refreshToken)
+        repository.putToken(userId, accessToken, refreshToken)
 
         val newAccessToken = EncryptedData(nextObject<String>().toByteArray())
 

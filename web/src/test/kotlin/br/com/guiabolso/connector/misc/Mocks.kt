@@ -16,5 +16,5 @@ class MockedTokenRepository : TokenRepository {
     override fun findAccessTokenBy(userId: String): EncryptedData? = null
     override fun findRefreshTokenBy(userId: String): EncryptedData? = null
     override fun updateAccessToken(userId: String, accessToken: EncryptedData) {}
-    override fun insertToken(userId: String, accessToken: EncryptedData, refreshToken: EncryptedData) {}
+    override fun putToken(userId: String, accessToken: EncryptedData, refreshToken: EncryptedData) {}
 }

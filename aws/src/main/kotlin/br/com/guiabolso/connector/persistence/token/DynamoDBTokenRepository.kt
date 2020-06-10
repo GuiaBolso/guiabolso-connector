@@ -51,7 +51,7 @@ class DynamoDBTokenRepository(
         table.updateItem(spec)
     }
 
-    override fun insertToken(userId: String, accessToken: EncryptedData, refreshToken: EncryptedData) {
+    override fun putToken(userId: String, accessToken: EncryptedData, refreshToken: EncryptedData) {
         val item = Item().withPrimaryKey("userId", userId)
             .withString("accessToken", accessToken.stringValue())
             .withString("refreshToken", refreshToken.stringValue())

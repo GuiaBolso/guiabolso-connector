@@ -32,7 +32,7 @@ class StubbedTokenRepository(private val database: InMemoryDatabase) : TokenRepo
             ?.accessToken = accessToken.stringValue()
     }
 
-    override fun insertToken(userId: String, accessToken: EncryptedData, refreshToken: EncryptedData) {
+    override fun putToken(userId: String, accessToken: EncryptedData, refreshToken: EncryptedData) {
         database.findAllByType<Token>().apply {
             removeIf { it.userId == userId }
             add(

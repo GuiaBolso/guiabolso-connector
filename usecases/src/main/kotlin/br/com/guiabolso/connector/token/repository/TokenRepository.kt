@@ -10,5 +10,5 @@ interface TokenRepository {
 
     fun updateAccessToken(userId: String, accessToken: EncryptedData)
 
-    fun insertToken(userId: String, accessToken: EncryptedData, refreshToken: EncryptedData)
+    fun putToken(userId: String, accessToken: EncryptedData, refreshToken: EncryptedData)
 }
