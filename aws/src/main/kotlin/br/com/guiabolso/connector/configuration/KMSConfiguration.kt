@@ -10,9 +10,11 @@ import com.amazonaws.services.kms.AWSKMSClientBuilder
 import java.util.concurrent.TimeUnit
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.PropertySource
 
 @Aws
 @Configuration
+@PropertySource("classpath:/conf/aws.properties")
 class KMSConfiguration(configService: ConfigService) {
 
     private val encryptionKey = configService.getRequiredString("kms.encryption.key")

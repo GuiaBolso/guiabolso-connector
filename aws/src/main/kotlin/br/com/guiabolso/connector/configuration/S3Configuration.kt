@@ -4,9 +4,11 @@ import com.amazonaws.client.builder.AwsClientBuilder
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.PropertySource
 
 @Aws
 @Configuration
+@PropertySource("classpath:/conf/aws.properties")
 class S3Configuration(
     configService: ConfigService
 ) {
