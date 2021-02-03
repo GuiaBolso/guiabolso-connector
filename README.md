@@ -1,3 +1,4 @@
+
 # Guiabolso Connector
 
 [![build](https://github.com/GuiaBolso/guiabolso-connector/workflows/build/badge.svg?branch=master)](https://github.com/GuiaBolso/guiabolso-connector/actions)
@@ -5,10 +6,13 @@
 
 O Guiabolso Connector é um cliente desenvolvido em Kotlin, que provê uma camada de abstração com o Guiabolso Connect com o objetivo de tornar _plug-and-play_ a integração com o produto .
 
-Se você estiver interessado apenas em como configurar o Guiabolso Connector para integração no seu ambiente, sugerimos visitar a [área do desenvolvedor](https://guiabolsoconnect.com.br/) no nosso site, você vai encontrar um _quickStart_ com um passo-a-passo de com realizar a integração.
+Se você estiver interessado apenas em como configurar o Guiabolso Connector para integração no seu ambiente, sugerimos visitar a [área do desenvolvedor](https://guiabolsoconnect.com.br/) no nosso site, você vai encontrar um _quickStart_ com um passo-a-passo de como realizar a integração.
 
 # Pré requisitos
 - Java Development Kit 8 ou superior:
+
+## Nos testes unitários
+Nos testes unitários, nós usamos a classe [`LocalDatastoreHelper`](https://googleapis.dev/java/google-cloud-clients/0.89.0-alpha/com/google/cloud/datastore/testing/LocalDatastoreHelper.html), que auxilia na criação do `Google Cloud Datastore`. Certifique-se que você possui configurado corretamente as variáveis de ambiente `$JAVA_HOME` e `$PATH` com o local da instalação do Java.
 
 # Estrutura do projeto
 O projeto usa como arquitetura as práticas de [Clean Architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html) com o intuito de tornar-se adaptável com as tecnologias/recursos usadas pelos parceiros.

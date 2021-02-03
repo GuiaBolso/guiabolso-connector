@@ -4,7 +4,7 @@ ARG VERSION
 ARG DATADOG_VERSION="0.49.0"
 ENV APP_VERSION=${VERSION}
 
-LABEL maintainer="Guiabolso Team"
+LABEL version="${VERSION}" description="Guiabolso Connector" maintainer="Guiabolso Connect<suporteconnect@guiabolso.com.br>"
 
 RUN mkdir -p /opt/app/libs
 
