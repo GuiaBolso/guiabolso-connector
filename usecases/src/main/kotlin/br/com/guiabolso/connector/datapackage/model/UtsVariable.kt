@@ -1,4 +1,4 @@
-package br.com.guiabolso.connector.handlers.models
+package br.com.guiabolso.connector.datapackage.model
 
 data class UtsVariable(
     val key: String,

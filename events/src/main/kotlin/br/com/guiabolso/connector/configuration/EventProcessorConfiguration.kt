@@ -1,12 +1,12 @@
 package br.com.guiabolso.connector.configuration
 
-import br.com.guiabolso.connector.auth.AuthenticationService
-import br.com.guiabolso.connector.auth.NoOpAuthenticationService
+import br.com.guiabolso.connector.common.auth.AuthenticationService
+import br.com.guiabolso.connector.common.auth.NoOpAuthenticationService
 import br.com.guiabolso.connector.common.tracking.Tracer
+import br.com.guiabolso.connector.datapackage.DataPackageService
 import br.com.guiabolso.connector.datapackage.model.DataPackageConfiguration
 import br.com.guiabolso.connector.event.EventDispatcher
 import br.com.guiabolso.connector.event.cache.CachedEventDispatcher
-import br.com.guiabolso.connector.event.cache.EventCacheService
 import br.com.guiabolso.connector.event.exception.EventException
 import br.com.guiabolso.connector.event.exception.RedirectException
 import br.com.guiabolso.connector.handlers.MergingEventHandler
@@ -60,14 +60,14 @@ class EventProcessorConfiguration {
         configService: ConfigService,
         dataPackageConfiguration: DataPackageConfiguration,
         dispatcher: CachedEventDispatcher,
-        eventCacheService: EventCacheService,
+        dataPackageService: DataPackageService,
         @Qualifier("eventAuthenticationService") eventAuthenticationService: AuthenticationService
     ): EventHandlerDiscovery {
         val logEnabled = configService.getBoolean("event.log.startAndFinish", true)
         val registry = SimpleEventHandlerRegistry()
 
         dataPackageConfiguration.dataPackages.forEach {
-            val eventHandler = MergingEventHandler(it, dispatcher, eventAuthenticationService, eventCacheService)
+            val eventHandler = MergingEventHandler(it, dataPackageService)
 
             if (logEnabled) {
                 registry.add(LoggingEventHandlerWrapper(eventHandler))

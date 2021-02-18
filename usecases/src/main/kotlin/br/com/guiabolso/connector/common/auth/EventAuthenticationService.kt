@@ -1,4 +1,4 @@
-package br.com.guiabolso.connector.auth
+package br.com.guiabolso.connector.common.auth
 
 import br.com.guiabolso.connector.common.credentials.ClientCredentials
 import br.com.guiabolso.connector.configuration.ConfigService

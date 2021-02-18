@@ -1,7 +1,7 @@
 package br.com.guiabolso.connector.proxy
 
-import br.com.guiabolso.connector.auth.AuthenticationService
-import br.com.guiabolso.connector.auth.NoOpAuthenticationService
+import br.com.guiabolso.connector.common.auth.AuthenticationService
+import br.com.guiabolso.connector.common.auth.NoOpAuthenticationService
 import br.com.guiabolso.connector.event.EventDispatcher
 import br.com.guiabolso.connector.misc.EasyRandomWrapper.nextObject
 import br.com.guiabolso.connector.misc.buildEvent

@@ -1,6 +1,6 @@
 package br.com.guiabolso.connector.proxy
 
-import br.com.guiabolso.connector.auth.AuthenticationService
+import br.com.guiabolso.connector.common.auth.AuthenticationService
 import br.com.guiabolso.connector.event.EventDispatcher
 import br.com.guiabolso.events.model.RequestEvent
 import br.com.guiabolso.events.model.ResponseEvent
