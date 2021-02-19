@@ -20,10 +20,12 @@ repositories {
     mavenCentral()
 }
 
-subprojects {
+allprojects {
     group = "br.com.guiabolso"
     version = "1.0.0"
+}
 
+subprojects {
     apply(plugin = "kotlin")
     apply(plugin = "kotlin-spring")
     apply(plugin = "jacoco")

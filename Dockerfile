@@ -1,16 +1,35 @@
-FROM openjdk:11.0.7-jdk
-
-ARG VERSION
+# Builder
+ARG GUIABOLSO_CONNECTOR_VERSION
 ARG DATADOG_VERSION="0.49.0"
-ENV APP_VERSION=${VERSION}
 
-LABEL version="${VERSION}" description="Guiabolso Connector" maintainer="Guiabolso Connect<suporteconnect@guiabolso.com.br>"
+FROM gradle:5.4-jdk11 AS builder
+ARG GUIABOLSO_CONNECTOR_VERSION
+ARG DATADOG_VERSION
 
-RUN mkdir -p /opt/app/libs
+COPY ./ /home/gradle/project
 
-RUN wget -O /opt/app/libs/dd-java-agent.jar "https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.datadoghq&a=dd-java-agent&v=$DATADOG_VERSION"
+WORKDIR /home/gradle/project
 
-ADD "application/build/distributions/application-${APP_VERSION}.tar" /opt/app/
+RUN gradle -Dorg.gradle.daemon=false distZip --stacktrace --info
+
+RUN mkdir -p /home/gradle/project/build/distributions/app/
+
+RUN wget -O /home/gradle/dd-java-agent.jar  "https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.datadoghq&a=dd-java-agent&v=$DATADOG_VERSION"
+
+RUN unzip /home/gradle/project/application/build/distributions/application-${GUIABOLSO_CONNECTOR_VERSION}.zip -d /home/gradle/project/build/distributions/
+
+RUN mv /home/gradle/project/build/distributions/application-${GUIABOLSO_CONNECTOR_VERSION}/*  /home/gradle/project/build/distributions/app
+
+# Application
+FROM openjdk:11.0.7-jre
+ARG GUIABOLSO_CONNECTOR_VERSION
+LABEL version="${GUIABOLSO_CONNECTOR_VERSION}" description="Guiabolso Connector" maintainer="Guiabolso Connect<suporteconnect@guiabolso.com.br>"
+
+COPY --from=builder /home/gradle/project/build/distributions/app/ /opt/app/
+
+COPY --from=builder /home/gradle/dd-java-agent.jar /opt/datadog/dd-java-agent.jar
+
+RUN rm -rf /var/cache/*
 
 EXPOSE 8080
-CMD "/opt/app/application-${APP_VERSION}/bin/application"
+CMD "/opt/app/bin/application"
