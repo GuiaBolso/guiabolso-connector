@@ -10,7 +10,7 @@ COPY ./ /home/gradle/project
 
 WORKDIR /home/gradle/project
 
-RUN gradle -Dorg.gradle.daemon=false distZip --stacktrace --info
+RUN gradle -Dorg.gradle.daemon=false build --stacktrace --info
 
 RUN mkdir -p /home/gradle/project/build/distributions/app/
 
