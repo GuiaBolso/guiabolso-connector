@@ -1,12 +1,18 @@
 package br.com.guiabolso.connector.event.cache
 
+import br.com.guiabolso.connector.common.failure.RedirectOnUnauthorizedPolicy
+import br.com.guiabolso.connector.common.failure.RedirectOnUnauthorizedService
 import br.com.guiabolso.connector.event.EventDispatcher
+import br.com.guiabolso.connector.event.exception.EventException
 import br.com.guiabolso.connector.event.exception.MissingRequiredParameterException
+import br.com.guiabolso.connector.event.exception.RedirectException
 import br.com.guiabolso.connector.event.misc.EasyRandomWrapper.nextObject
 import br.com.guiabolso.connector.event.misc.buildEvent
 import br.com.guiabolso.connector.event.model.EventIdentifier
 import br.com.guiabolso.events.builder.EventBuilder
+import br.com.guiabolso.events.model.EventErrorType
 import com.google.gson.JsonObject
+import com.nhaarman.mockito_kotlin.doNothing
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
@@ -21,13 +27,15 @@ class CachedEventDispatcherTest {
 
     private lateinit var eventDispatcher: EventDispatcher
     private lateinit var eventCacheService: EventCacheService
+    private lateinit var redirectOnUnauthorizedService: RedirectOnUnauthorizedService
     private lateinit var dispatcher: CachedEventDispatcher
 
     @BeforeEach
     fun setUp() {
         eventDispatcher = mock()
         eventCacheService = mock()
-        dispatcher = CachedEventDispatcher(eventDispatcher, eventCacheService)
+        redirectOnUnauthorizedService = mock()
+        dispatcher = CachedEventDispatcher(eventDispatcher, eventCacheService, redirectOnUnauthorizedService)
     }
 
     @Test
@@ -166,19 +174,43 @@ class CachedEventDispatcherTest {
     }
 
     @Test
+    fun `should redirect if unauthorized exception and policy USER_EVENTS active`() {
+        val userId = nextObject<String>()
+        val event = buildEvent(userId = userId)
+        val eventIdentifier = EventIdentifier(event.name, event.version)
+        val ex = EventException("failed", emptyMap(), EventErrorType.Unauthorized)
+        val redirect = RedirectException(event, nextObject(), ex)
+
+        whenever(eventCacheService.shouldUseCachedEvent(eventIdentifier)).thenReturn(false)
+        whenever(eventDispatcher.sendEvent(event)).thenThrow(ex)
+        whenever(redirectOnUnauthorizedService.maybeRedirectFor(event, ex, RedirectOnUnauthorizedPolicy.USER_EVENTS))
+            .thenThrow(redirect)
+
+        assertThatExceptionOfType(RedirectException::class.java).isThrownBy { dispatcher.sendEvent(event) }
+
+        verify(eventCacheService).shouldUseCachedEvent(eventIdentifier)
+        verify(eventDispatcher).sendEvent(event)
+        verifyNoMoreInteractions(eventCacheService)
+        verify(redirectOnUnauthorizedService).maybeRedirectFor(event, ex, RedirectOnUnauthorizedPolicy.USER_EVENTS)
+    }
+
+    @Test
     fun `should throw exception on failure`() {
         val userId = nextObject<String>()
         val event = buildEvent(userId = userId)
         val eventIdentifier = EventIdentifier(event.name, event.version)
 
+        val exception = RuntimeException()
         whenever(eventCacheService.shouldUseCachedEvent(eventIdentifier)).thenReturn(false)
-        whenever(eventDispatcher.sendEvent(event)).thenThrow(RuntimeException::class.java)
+        whenever(eventDispatcher.sendEvent(event)).thenThrow(exception)
+        doNothing().`when`(redirectOnUnauthorizedService).maybeRedirectFor(event, exception, RedirectOnUnauthorizedPolicy.USER_EVENTS)
         whenever(eventCacheService.shouldUseCachedEventOnFailure(eventIdentifier)).thenReturn(false)
 
         assertThatExceptionOfType(RuntimeException::class.java).isThrownBy { dispatcher.sendEvent(event) }
 
         verify(eventCacheService).shouldUseCachedEvent(eventIdentifier)
         verify(eventDispatcher).sendEvent(event)
+        verify(redirectOnUnauthorizedService).maybeRedirectFor(event, exception, RedirectOnUnauthorizedPolicy.USER_EVENTS)
         verify(eventCacheService).shouldUseCachedEventOnFailure(eventIdentifier)
     }
 }

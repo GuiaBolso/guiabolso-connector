@@ -152,6 +152,9 @@ disponível em cada perfil:
 ### Aplicação - Estará disponível para todos os perfis.
  - `CLIENT_ID` - Usado para configurar clientId que deverá ser usado ao fazer integração.
  - `CLIENT_SECRECT` - Senha associada ao `CLIENT_ID`.
+ - `REDIRECT_UNAUTHORIZED_POLICY` - (Opcional) Possibilidade de redirecionar o usuario caso não possua permissões, os possíveis
+valores são `USER_EVENTS` para eventos do usuário, `PARTNER_EVENTS` para eventos do parceiro, `ALWAYS` para todos e `NEVER` para
+   não utilizar, sendo esse valor padrão.
 
 ### **redis**
 - `REDIS_ADDRESS` - Url de conexão com redis, ex: `redis://master-localhost:6379,redis://slave-localhost:6379`.

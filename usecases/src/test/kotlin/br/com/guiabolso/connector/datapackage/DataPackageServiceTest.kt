@@ -8,6 +8,7 @@ import br.com.guiabolso.connector.datapackage.model.Uts
 import br.com.guiabolso.connector.datapackage.model.UtsVariable
 import br.com.guiabolso.connector.event.cache.CachedEventDispatcher
 import br.com.guiabolso.connector.event.cache.EventCacheService
+import br.com.guiabolso.connector.event.exception.RedirectException
 import br.com.guiabolso.connector.event.misc.EasyRandomWrapper.nextObject
 import br.com.guiabolso.connector.event.misc.buildEvent
 import br.com.guiabolso.connector.event.model.EventIdentifier
@@ -23,6 +24,7 @@ import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import com.nhaarman.mockito_kotlin.verifyZeroInteractions
 import com.nhaarman.mockito_kotlin.whenever
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Test
 
 class DataPackageServiceTest {
@@ -264,5 +266,31 @@ class DataPackageServiceTest {
             Assertions.assertThat(firstValue).isEqualToIgnoringGivenFields(response, "payload")
             Assertions.assertThat(firstValue.payloadAs(Uts::class.java).variables).hasSameElementsAs(expected)
         }
+    }
+
+    @Test
+    fun `should throws when exception is Redirect`() {
+        setUp()
+
+        val source = nextObject<PackageSource>()
+        val dataPackage = DataPackage(
+            publish = nextObject(),
+            sources = listOf(source)
+        )
+        val userId = nextObject<String>()
+        val event = buildEvent(userId = userId)
+        val eventIdentifier = EventIdentifier(event.name, event.version)
+
+        val sourceEvent = buildEvent(name = source.eventName, version = source.eventVersion, userId = userId)
+
+        whenever(eventCacheService.shouldUseCachedEvent(eventIdentifier)).thenReturn(false)
+        whenever(eventDispatcher.sendEvent(sourceEvent)).thenThrow(RedirectException::class.java)
+
+        assertThatExceptionOfType(RedirectException::class.java)
+            .isThrownBy { service.handleDataPackage(dataPackage, event) }
+
+        verify(eventCacheService).shouldUseCachedEvent(eventIdentifier)
+        verifyNoMoreInteractions(eventCacheService)
+        verify(eventDispatcher).sendEvent(sourceEvent)
     }
 }

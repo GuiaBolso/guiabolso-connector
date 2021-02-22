@@ -10,6 +10,7 @@ import br.com.guiabolso.connector.event.cache.CachedEventDispatcher
 import br.com.guiabolso.connector.event.cache.EventCacheService
 import br.com.guiabolso.connector.event.cache.withCacheUsage
 import br.com.guiabolso.connector.event.exception.EventException
+import br.com.guiabolso.connector.event.exception.RedirectException
 import br.com.guiabolso.connector.event.misc.requiredString
 import br.com.guiabolso.connector.event.model.EventIdentifier
 import br.com.guiabolso.events.builder.EventBuilder
@@ -100,6 +101,8 @@ class DataPackageService(
             Pair(variables, true)
         } catch (e: ExecutionException) {
             logger.error("Fail on dispatch $source", e)
+
+            if (e.cause is RedirectException) throw e.cause!!
             variables.add(UtsVariable(key = source.statusKey, value = resolveError(e.cause), type = "STRING"))
             Pair(variables, false)
         }
