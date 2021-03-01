@@ -1,5 +1,6 @@
 # Builder
 ARG GUIABOLSO_CONNECTOR_VERSION
+ARG SHORT_COMMIT
 ARG DATADOG_VERSION="0.49.0"
 
 FROM gradle:5.4-jdk11 AS builder
@@ -23,7 +24,9 @@ RUN mv /home/gradle/project/build/distributions/application-${GUIABOLSO_CONNECTO
 # Application
 FROM openjdk:11.0.7-jre
 ARG GUIABOLSO_CONNECTOR_VERSION
-LABEL version="${GUIABOLSO_CONNECTOR_VERSION}" description="Guiabolso Connector" maintainer="Guiabolso Connect<suporteconnect@guiabolso.com.br>"
+ARG SHORT_COMMIT
+
+LABEL ref_commit=${SHORT_COMMIT} version="${GUIABOLSO_CONNECTOR_VERSION}" description="Guiabolso Connector" maintainer="Guiabolso Connect<suporteconnect@guiabolso.com.br>"
 
 COPY --from=builder /home/gradle/project/build/distributions/app/ /opt/app/
 

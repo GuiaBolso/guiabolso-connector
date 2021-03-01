@@ -19,6 +19,7 @@ jobs:
         run: |
           echo "GUIABOLSO_CONNECTOR_VERSION=$(./gradlew properties --console=plain -q | grep "^version:" | awk '{print $2}')" >> $GITHUB_ENV
           echo "DATADOG_VERSION=$(./gradlew properties --console=plain -q | grep "^datadog-version:" | awk '{print $2}')" >> $GITHUB_ENV
+          echo "SHORT_COMMIT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -41,3 +42,4 @@ jobs:
           build-args: |
             GUIABOLSO_CONNECTOR_VERSION=${{ env.GUIABOLSO_CONNECTOR_VERSION }}
             DATADOG_VERSION=${{ env.DATADOG_VERSION }}
+            SHORT_COMMIT=${{ env.SHORT_COMMIT }}
