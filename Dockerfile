@@ -34,5 +34,5 @@ COPY --from=builder /home/gradle/dd-java-agent.jar /opt/datadog/dd-java-agent.ja
 
 RUN rm -rf /var/cache/*
 
-EXPOSE 8080
+EXPOSE 9000
 CMD "/opt/app/bin/application"
